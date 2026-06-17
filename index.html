@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Richtig atmen – drei Werkzeuge für jeden Einsatz bereit</title>
+  <style>
+    /* Anton + Inter via Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #EDE9DD;
+      --brown:  #544013;
+      --orange: #C85A14;
+      --dark:   #1a1506;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    /* ── Deck ─────────────────────────────────────────── */
+    #deck {
+      width: 100vw; height: 100vh;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slide {
+      display: none;
+      position: absolute; inset: 0;
+      background: var(--bg);
+      padding: 4.5vh 6vw 12vh;   /* bottom gap for badge */
+    }
+    .slide.active { display: block; }
+
+    /* ── Slide label (top of each slide) ─────────────── */
+    .lbl {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2.8rem);   /* was too small before */
+      color: var(--brown);
+      letter-spacing: .01em;
+      margin-bottom: 2.5vh;
+    }
+    .lbl .o { color: var(--orange); }
+
+    /* ── Two-column layout ───────────────────────────── */
+    .two {
+      display: flex;
+      align-items: center;
+      gap: 4vw;
+      height: calc(100vh - 19vh);  /* label + badge */
+    }
+    .left  { flex: 0 0 46%; }
+    .right {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      /* Prevent right-column clicks from advancing slide */
+      pointer-events: none;
+    }
+    .right > * { pointer-events: auto; }
+
+    .main-txt {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(1.9rem, 4.2vw, 4rem);
+      color: var(--dark);
+      line-height: 1.1;
+      margin-bottom: 2.5vh;
+    }
+    .sub-txt {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: clamp(.95rem, 1.8vw, 1.5rem);
+      color: var(--brown);
+      line-height: 1.45;
+    }
+
+    /* ── Menti badge (bottom strip on exercise slides) ── */
+    .menti-badge {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 10vh;
+      background: rgba(84,64,19,.09);
+      border-top: 2px solid rgba(84,64,19,.15);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 6vw;
+      pointer-events: none;
+    }
+    .badge-technique {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(1rem, 2.1vw, 1.8rem);
+      color: var(--orange);
+    }
+    .badge-menti {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: clamp(.72rem, 1.3vw, 1.1rem);
+      color: var(--brown); opacity: .85;
+      text-align: right; max-width: 55%; line-height: 1.3;
+    }
+    .badge-menti .check { color: #2a7a2a; font-weight: 700; }
+
+    /* ── Navigation bar ──────────────────────────────── */
+    #nav {
+      position: fixed;
+      bottom: 11.5vh; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(84,64,19,.13);
+      backdrop-filter: blur(6px);
+      padding: .4rem 1.2rem;
+      border-radius: 999px;
+      z-index: 999;
+      cursor: default;
+    }
+    #nav button {
+      background: none; border: none;
+      color: var(--brown); font-size: 1.1rem;
+      cursor: pointer; padding: .15rem .45rem;
+      opacity: .65; transition: opacity .15s;
+    }
+    #nav button:hover { opacity: 1; }
+    #counter {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: .78rem; color: var(--brown); opacity: .6;
+      min-width: 3rem; text-align: center;
+    }
+    #fs-hint {
+      position: fixed; top: 1.2vh; right: 1.5vw;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: .7rem; color: rgba(84,64,19,.3);
+      pointer-events: none; z-index: 999;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SLIDE 1 – Titel
+    ═══════════════════════════════════════════════════ */
+    #s1 { padding-bottom: 4.5vh; }   /* no badge */
+
+    #s1 .stripe-tr {
+      position: absolute; top: 0; right: 0;
+      width: 28vw; height: 55vh; pointer-events: none;
+    }
+    #s1 .stripe-bl {
+      position: absolute; bottom: 0; left: 0;
+      width: 18vw; height: 38vh; pointer-events: none;
+    }
+    #s1 .title {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(4rem, 11vw, 11rem);   /* large */
+      line-height: .97;
+      color: var(--brown);
+      margin-top: 3vh;
+    }
+    #s1 .title .o { color: var(--orange); }
+    #s1 .subtitle {
+      position: absolute; bottom: 9vh; right: 6vw;
+      font-family: 'Inter', Arial, sans-serif;
+      font-weight: 700;
+      font-size: clamp(.85rem, 1.6vw, 1.3rem);
+      color: var(--brown); text-align: right;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SLIDE 2 – Lernziel
+    ═══════════════════════════════════════════════════ */
+    #s2 { padding-bottom: 4.5vh; }
+    #s2 .center-body {
+      display: flex; align-items: center; justify-content: center;
+      height: calc(100vh - 12vh); text-align: center;
+    }
+    #s2 .center-body p {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(2rem, 4.8vw, 4.6rem);
+      color: var(--dark); line-height: 1.18;
+      max-width: 88%;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SLIDE 3 – Menti
+    ═══════════════════════════════════════════════════ */
+    #s3 { padding-bottom: 4.5vh; }
+    #s3 .menti-inner {
+      display: flex; align-items: center;
+      justify-content: center; gap: 7vw;
+      height: calc(100vh - 12vh);
+    }
+    #s3 .menti-text {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.7rem);
+      color: var(--brown); line-height: 1.3;
+    }
+    #s3 .menti-text .big {
+      font-size: clamp(2.4rem, 5.5vw, 5rem);
+      color: var(--orange); display: block; margin-bottom: 1.2vh;
+    }
+    #s3 .qr-img {
+      width: clamp(180px, 26vw, 380px);
+      height: clamp(180px, 26vw, 380px);
+      object-fit: contain;
+      border: 5px solid var(--brown);
+      padding: 8px; background: #fff; display: block;
+    }
+    #s3 .qr-placeholder {
+      width: clamp(180px, 26vw, 380px);
+      height: clamp(180px, 26vw, 380px);
+      border: 3px dashed var(--orange);
+      display: none; align-items: center; justify-content: center;
+      background: #f4f0e6;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 1rem; color: var(--orange);
+      text-align: center; padding: 1rem;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SLIDE 4 – Zwerchfell + Facebook Video
+    ═══════════════════════════════════════════════════ */
+    .fb-wrap {
+      width: min(44vw, 500px);
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 28px rgba(0,0,0,.18);
+      flex-shrink: 0;
+      /* clicks inside here are handled by Facebook player */
+      position: relative;
+    }
+    .fb-wrap iframe {
+      width: 100%; height: 100%;
+      border: none; display: block;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SLIDE 5 – Vagusnerv diagram
+    ═══════════════════════════════════════════════════ */
+    .diagram-box {
+      background: #f4f0e6; border-radius: 14px;
+      padding: 3.5vh 4vw;
+    }
+    .diag-row { display: flex; gap: 5vw; align-items: flex-start; }
+    .diag-col {
+      display: flex; flex-direction: column;
+      align-items: center; gap: .8vh; text-align: center;
+    }
+    .diag-col .dlbl {
+      font-family: 'Inter', Arial, sans-serif; font-weight: 700;
+      font-size: clamp(.9rem, 1.5vw, 1.3rem); color: var(--dark);
+    }
+    .diag-col .dsub {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: clamp(.72rem, 1.05vw, .95rem);
+      color: #555; line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SLIDE 6 – Nase
+    ═══════════════════════════════════════════════════ */
+    .heads-box {
+      background: #f4f0e6; border-radius: 14px;
+      padding: 3.5vh 4vw;
+      display: flex; gap: 5vw; align-items: center;
+    }
+    .head-unit {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 1.2vh;
+    }
+    .hlbl {
+      font-family: 'Inter', Arial, sans-serif; font-weight: 900;
+      font-size: clamp(1rem, 2vw, 1.7rem); color: var(--dark);
+    }
+  </style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ══ SLIDE 1 – Titel ══════════════════════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="stripe-tr">
+      <svg viewBox="0 0 320 480" xmlns="http://www.w3.org/2000/svg"
+           width="100%" height="100%" preserveAspectRatio="none">
+        <polygon points="320,0 320,480 180,480 320,60"   fill="#C85A14"/>
+        <polygon points="320,60 320,200 210,480 180,480"  fill="#EDE9DD"/>
+        <polygon points="320,200 320,400 90,480 210,480"  fill="#C85A14"/>
+      </svg>
+    </div>
+    <div class="stripe-bl">
+      <svg viewBox="0 0 240 340" xmlns="http://www.w3.org/2000/svg"
+           width="100%" height="100%" preserveAspectRatio="none">
+        <polygon points="0,340 240,340 0,60"             fill="#C85A14"/>
+        <polygon points="0,60 190,340 240,340 0,160"     fill="#EDE9DD"/>
+        <polygon points="0,160 120,340 190,340"          fill="#C85A14"/>
+      </svg>
+    </div>
+
+    <h1 class="title">
+      Richtig atmen –&nbsp;<span class="o">drei</span><br>
+      <span class="o">Werkzeuge</span>&nbsp;für jeden<br>
+      Einsatz bereit
+    </h1>
+    <div class="subtitle">Atemregulation zur Auf- und Abregulierung</div>
+  </div>
+
+  <!-- ══ SLIDE 2 – Lernziel ═══════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="lbl">Was du heute mitnimmst –&nbsp;<span class="o">das Lernziel</span></div>
+    <div class="center-body">
+      <p>Nach dieser Lektion könnt ihr alle 3 Übungen korrekt ausführen – und auf der Karte festhalten, welche für euren Einsatz passt und warum.</p>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 3 – Menti ══════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div class="lbl">Wahr oder Falsch –&nbsp;<span class="o">Menti</span></div>
+    <div class="menti-inner">
+      <div class="menti-text">
+        <span class="big">Smartphone raus.</span>
+        QR-Code scannen<br>und abstimmen.
+      </div>
+      <!-- Speichere den QR-Code als "menti-qr.png" in diesen Ordner -->
+      <img src="menti-qr.png" alt="Menti QR-Code" class="qr-img"
+           onerror="this.style.display='none';
+                    this.nextElementSibling.style.display='flex'">
+      <div class="qr-placeholder">📱 menti-qr.png<br>in Ordner legen</div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 4 – Zwerchfell + Facebook Video ═══════════ -->
+  <div class="slide" id="s4">
+    <div class="lbl">Euer grösster Atemmuskel –&nbsp;<span class="o">Das Zwerchfell</span></div>
+    <div class="two">
+      <div class="left">
+        <p class="main-txt">Mundatmung lässt ihn schlafen.<br>Breath of Fire weckt ihn auf.</p>
+      </div>
+      <div class="right">
+        <div class="fb-wrap">
+          <!--
+            Offizieller Facebook-Embed (kein Download, kein Copyright-Problem).
+            Der Nutzer muss einmalig auf Play klicken – danach läuft das Video.
+            Ton: im Facebook-Player unten links stummschalten.
+          -->
+          <iframe
+            src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Fhubermanlab%2Fvideos%2F851519653182626%2F&show_text=false&width=476&t=15"
+            scrolling="no"
+            allowfullscreen="true"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
+          <!--
+            Der Shield-Layer blockiert Klicks, die sonst die Folie weiterschalten würden.
+            Er wird beim Betreten von Folie 4 automatisch entfernt,
+            damit der erste Klick das Video startet.
+          -->
+        </div>
+      </div>
+    </div>
+    <div class="menti-badge">
+      <span class="badge-technique">🔥 Breath of Fire</span>
+      <span class="badge-menti">① «Atmen ist kaum steuerbar» &nbsp;<span class="check">→ FALSCH ✓</span></span>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 5 – Vagusnerv ══════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div class="lbl">Ein Schalter, den du selbst bedienst –&nbsp;<span class="o">der Vagusnerv</span></div>
+    <div class="two">
+      <div class="left">
+        <p class="main-txt">Je länger die Ausatmung, desto mehr bremst du dich selbst.</p>
+        <p class="sub-txt">CO₂ ist kein Abfall –<br>es bringt O₂ ans Gewebe.</p>
+      </div>
+      <div class="right">
+        <div class="diagram-box">
+          <div class="diag-row">
+
+            <!-- Einatmung: grosser oranger Pfeil nach oben + Herz -->
+            <div class="diag-col">
+              <svg width="130" height="150" viewBox="0 0 130 150"
+                   xmlns="http://www.w3.org/2000/svg">
+                <!-- Pfeil hoch, orange, breit -->
+                <polygon points="65,4 100,58 80,58 80,105 50,105 50,58 30,58"
+                         fill="#C85A14"/>
+                <!-- Herz -->
+                <path d="M65 148 C65 148 18 118 18 84
+                         C18 62 33 48 48 48
+                         C57 48 65 55 65 55
+                         C65 55 73 48 82 48
+                         C97 48 112 62 112 84
+                         C112 118 65 148 65 148Z"
+                      fill="#1a1506"/>
+              </svg>
+              <span class="dlbl">Einatmung</span>
+              <span class="dsub">Sympathisches<br>Nervensystem</span>
+            </div>
+
+            <!-- Ausatmung: grosser oranger Pfeil nach unten + Herz -->
+            <div class="diag-col">
+              <svg width="130" height="150" viewBox="0 0 130 150"
+                   xmlns="http://www.w3.org/2000/svg">
+                <!-- Pfeil runter, orange, breit -->
+                <polygon points="65,146 30,92 50,92 50,45 80,45 80,92 100,92"
+                         fill="#C85A14"/>
+                <!-- Herz -->
+                <path d="M65 148 C65 148 18 118 18 84
+                         C18 62 33 48 48 48
+                         C57 48 65 55 65 55
+                         C65 55 73 48 82 48
+                         C97 48 112 62 112 84
+                         C112 118 65 148 65 148Z"
+                      fill="#1a1506"/>
+              </svg>
+              <span class="dlbl">Ausatmung</span>
+              <span class="dsub">Parasympathisches<br>Nervensystem<br>Vagusnerv</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="menti-badge">
+      <span class="badge-technique">😮‍💨 Physiological Sigh</span>
+      <span class="badge-menti">③ «CO₂ ist Abfall» &nbsp;<span class="check">→ FALSCH ✓</span></span>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 6 – Nase ═══════════════════════════════════ -->
+  <div class="slide" id="s6">
+    <div class="lbl">Kein Notausgang –&nbsp;<span class="o">Die Nase</span></div>
+    <div class="two">
+      <div class="left">
+        <p class="main-txt">Summen durch die Nase = Stickstoffmonoxid ×15.</p>
+        <p class="sub-txt">Klingt nach Yoga.<br>Ist Physiologie.</p>
+      </div>
+      <div class="right">
+        <div class="heads-box">
+          <!-- Kopf ohne NO -->
+          <div class="head-unit">
+            <svg width="120" height="145" viewBox="0 0 120 150"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M60 16 C32 16 14 37 14 62 C14 85 26 102 42 111
+                       L42 128 C42 135 50 139 60 139
+                       C70 139 78 135 78 128 L78 111
+                       C94 102 106 85 106 62 C106 37 88 16 60 16Z"
+                    fill="none" stroke="#1a1506" stroke-width="5"
+                    stroke-linejoin="round"/>
+              <!-- Mund offen -->
+              <ellipse cx="60" cy="80" rx="13" ry="7"
+                       fill="none" stroke="#1a1506" stroke-width="4"/>
+            </svg>
+            <span class="hlbl">No NO</span>
+          </div>
+          <!-- Kopf mit Summen / NO×15 -->
+          <div class="head-unit">
+            <svg width="120" height="145" viewBox="0 0 120 150"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M60 16 C32 16 14 37 14 62 C14 85 26 102 42 111
+                       L42 128 C42 135 50 139 60 139
+                       C70 139 78 135 78 128 L78 111
+                       C94 102 106 85 106 62 C106 37 88 16 60 16Z"
+                    fill="none" stroke="#1a1506" stroke-width="5"
+                    stroke-linejoin="round"/>
+              <!-- Mund zu (Summen) -->
+              <path d="M47 82 Q60 90 73 82"
+                    stroke="#1a1506" stroke-width="4"
+                    fill="none" stroke-linecap="round"/>
+              <!-- Vibrationswellen – orange -->
+              <path d="M88 58 Q98 52 88 46"
+                    stroke="#C85A14" stroke-width="3.5"
+                    fill="none" stroke-linecap="round"/>
+              <path d="M94 63 Q108 52 94 41"
+                    stroke="#C85A14" stroke-width="3"
+                    fill="none" stroke-linecap="round"/>
+              <path d="M100 68 Q118 52 100 36"
+                    stroke="#C85A14" stroke-width="2.5"
+                    fill="none" stroke-linecap="round"/>
+            </svg>
+            <span class="hlbl">NO×15</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="menti-badge">
+      <span class="badge-technique">🎵 Summen (Bhramari)</span>
+      <span class="badge-menti">② «Nasenatmung beim Sport ist gesünder» &nbsp;<span class="check">→ WAHR ✓</span></span>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button id="btn-prev" title="Zurück (←)">&#8592;</button>
+  <span id="counter">1 / 6</span>
+  <button id="btn-next" title="Weiter (→)">&#8594;</button>
+</div>
+<div id="fs-hint">F = Vollbild &nbsp;·&nbsp; Klick = weiter</div>
+
+<script>
+  const slides  = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  let cur = 0;
+
+  // ── Slide switching ──────────────────────────────────────
+  function show(n) {
+    slides[cur].classList.remove('active');
+    cur = ((n % slides.length) + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+  }
+
+  function go(dir) { show(cur + dir); }
+
+  // ── Click deck to advance ────────────────────────────────
+  // On slide 4 (video, index 3): only left 46% of screen advances —
+  // right side belongs to the Facebook iframe, no z-index tricks needed.
+  document.getElementById('deck').addEventListener('click', function(e) {
+    if (e.target.closest('#nav')) return;
+    if (cur === 3 && e.clientX > window.innerWidth * 0.46) return;
+    go(1);
+  });
+
+  document.getElementById('btn-prev').addEventListener('click', function(e) {
+    e.stopPropagation(); go(-1);
+  });
+  document.getElementById('btn-next').addEventListener('click', function(e) {
+    e.stopPropagation(); go(1);
+  });
+
+  // ── Keyboard ─────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
+    if (['ArrowLeft',  'ArrowUp'       ].includes(e.key)) { e.preventDefault(); go(-1); }
+    if (e.key === 'f' || e.key === 'F') {
+      document.fullscreenElement
+        ? document.exitFullscreen()
+        : document.documentElement.requestFullscreen();
+    }
+  });
+</script>
+</body>
+</html>
