@@ -1,0 +1,95 @@
+<svg viewBox="0 0 340 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a-org" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7Z" fill="#C85A14"/>
+    </marker>
+    <marker id="a-grau" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7Z" fill="#aaa"/>
+    </marker>
+    <marker id="a-green" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7Z" fill="#2a7a2a"/>
+    </marker>
+  </defs>
+
+  <!-- KOPF / MUNDATMUNG -->
+  <circle cx="40" cy="38" r="24" fill="#EDE9DD" stroke="#544013" stroke-width="2.5"/>
+  <path d="M29 47 Q40 56 51 47" stroke="#544013" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <line x1="40" y1="50" x2="40" y2="56" stroke="#544013" stroke-width="2"/>
+  <path d="M64 33 L86 26" stroke="#C85A14" stroke-width="2.5" marker-end="url(#a-org)"/>
+  <path d="M64 38 L86 38" stroke="#C85A14" stroke-width="2.5" marker-end="url(#a-org)"/>
+  <path d="M64 43 L86 50" stroke="#C85A14" stroke-width="2.5" marker-end="url(#a-org)"/>
+  <text x="90" y="27" font-family="Arial,sans-serif" font-size="10" fill="#C85A14" font-weight="bold">CO₂ weg!</text>
+  <text x="18" y="74" font-family="Arial,sans-serif" font-size="9" fill="#544013">Mund-/Schnellatmung</text>
+
+  <!-- Trennlinie -->
+  <line x1="10" y1="86" x2="330" y2="86" stroke="#544013" stroke-width="1" stroke-dasharray="3,3" opacity=".3"/>
+
+  <!-- LUNGE -->
+  <ellipse cx="240" cy="52" rx="56" ry="40" fill="#EDE9DD" stroke="#544013" stroke-width="2.5"/>
+  <text x="240" y="44" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#544013" font-weight="bold">Lunge</text>
+  <text x="305" y="29" font-family="Arial,sans-serif" font-size="14" fill="#2a7a2a" font-weight="bold">O₂</text>
+  <path d="M304 33 L284 44" stroke="#2a7a2a" stroke-width="2" marker-end="url(#a-green)"/>
+  <!-- RBKs schon voll -->
+  <ellipse cx="216" cy="60" rx="15" ry="11" fill="#C85A14"/>
+  <text x="216" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="216" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <ellipse cx="252" cy="60" rx="15" ry="11" fill="#C85A14"/>
+  <text x="252" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="252" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <!-- X = kein Platz für neues O2 -->
+  <line x1="295" y1="50" x2="280" y2="62" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="280" y1="50" x2="295" y2="62" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="240" y="86" text-anchor="middle" font-family="Arial,sans-serif" font-size="8.5" fill="#c0392b" font-weight="bold">Blut gesättigt – kein Platz!</text>
+
+  <!-- Verbindungspfeil Lunge → Blutgefäss -->
+  <path d="M188 92 L170 104" stroke="#544013" stroke-width="1.5" marker-end="url(#a-grau)" opacity=".4"/>
+
+  <!-- BLUTGEFÄSS -->
+  <rect x="18" y="104" width="304" height="66" rx="33" fill="#C85A14" opacity=".1" stroke="#C85A14" stroke-width="2"/>
+  <text x="170" y="118" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#C85A14" font-weight="bold">Blutgefäss – O₂-Stau</text>
+  <path d="M306 137 L20 137" stroke="#C85A14" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a-org)" opacity=".35"/>
+  <!-- RBKs im Stau -->
+  <ellipse cx="62" cy="137" rx="17" ry="12" fill="#C85A14"/>
+  <text x="62" y="134" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="62" y="143" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <ellipse cx="112" cy="137" rx="17" ry="12" fill="#C85A14"/>
+  <text x="112" y="134" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="112" y="143" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <ellipse cx="162" cy="137" rx="17" ry="12" fill="#C85A14"/>
+  <text x="162" y="134" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="162" y="143" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <ellipse cx="212" cy="137" rx="17" ry="12" fill="#C85A14"/>
+  <text x="212" y="134" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="212" y="143" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <ellipse cx="262" cy="137" rx="17" ry="12" fill="#C85A14"/>
+  <text x="262" y="134" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+  <text x="262" y="143" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#fff" font-weight="bold">O₂ O₂</text>
+
+  <!-- Bohr-Effekt Box -->
+  <rect x="18" y="176" width="304" height="32" rx="7" fill="#C85A14" opacity=".15"/>
+  <text x="170" y="189" text-anchor="middle" font-family="Arial,sans-serif" font-size="8.5" fill="#C85A14" font-weight="bold">Kein CO₂ → Hämoglobin hält O₂ fest (Bohr-Effekt)</text>
+  <text x="170" y="201" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#544013">O₂ wird nicht ans Gewebe abgegeben</text>
+
+  <!-- Verbindungspfeil → Gewebe -->
+  <path d="M170 208 L170 218" stroke="#544013" stroke-width="1.5" marker-end="url(#a-grau)" opacity=".4"/>
+
+  <!-- GEWEBE -->
+  <rect x="18" y="218" width="304" height="84" rx="12" fill="#EDE9DD" stroke="#544013" stroke-width="2"/>
+  <text x="170" y="236" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#544013" font-weight="bold">Gewebe / Muskel – Sauerstoffmangel</text>
+  <!-- Leere O2-Slots -->
+  <circle cx="56" cy="264" r="15" fill="none" stroke="#aaa" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="56" y="268" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#aaa">O₂?</text>
+  <circle cx="106" cy="264" r="15" fill="none" stroke="#aaa" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="106" y="268" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#aaa">O₂?</text>
+  <circle cx="156" cy="264" r="15" fill="none" stroke="#aaa" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="156" y="268" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#aaa">O₂?</text>
+  <!-- Symptome -->
+  <text x="194" y="251" font-family="Arial,sans-serif" font-size="8.5" fill="#c0392b">⚡ Muskelermüdung</text>
+  <text x="194" y="264" font-family="Arial,sans-serif" font-size="8.5" fill="#c0392b">🌀 Schwindel / Kribbeln</text>
+  <text x="194" y="277" font-family="Arial,sans-serif" font-size="8.5" fill="#c0392b">💓 Herzrasen / Angst</text>
+
+  <!-- Paradox Box -->
+  <rect x="68" y="316" width="204" height="36" rx="9" fill="#544013" opacity=".1" stroke="#544013" stroke-width="1.5"/>
+  <text x="170" y="331" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#544013" font-weight="bold">Paradox: Mehr Atmen =</text>
+  <text x="170" y="345" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#C85A14" font-weight="bold">Weniger O₂ im Gewebe!</text>
+</svg>
